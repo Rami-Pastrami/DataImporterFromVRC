@@ -1,5 +1,7 @@
 from pathlib import Path
 from enum import Enum
+import numpy as np
+import pandas as pd
 
 # Following Settings affect parsing of log data.
 # Ensure this matches the export settings Unity side
@@ -33,7 +35,7 @@ class RawLogLine:
         self.partition_type: DATA_PARTITION = DATA_PARTITION(int(components[1]))
         self.data_type: HEADER_TYPE = HEADER_TYPE(int(components[2]))
         self.raw_string: str = components[3]
-        self.processed_value = None
+        self.processed_value: list = []
         match self.data_type:
             case HEADER_TYPE.HEADER_CSV:
                 self.processed_value = self._process_string_as_csv(self.raw_string)
@@ -63,6 +65,7 @@ class RawLogLine:
         return elements
 
 
+
 def read_log_file_without_further_formatting(log_file_path: Path) -> list[RawLogLine]:
     f = open(log_file_path, 'r', encoding='utf8')
     output: list[RawLogLine] = []
@@ -72,6 +75,41 @@ def read_log_file_without_further_formatting(log_file_path: Path) -> list[RawLog
             continue
         output.append(RawLogLine(line_stripped))
     return output
+
+def get_tags_in_order(imported_raw_lines: list[RawLogLine]) -> list[str]:
+    output: list[str] = [""] * len(imported_raw_lines)
+    for i in range(len(imported_raw_lines)):
+        output[i] = imported_raw_lines[i].tag
+    return output
+
+def get_formatted_arrays_in_order(imported_raw_lines: list[RawLogLine]) -> list[list]:
+    output: list[str] = [[]] * len(imported_raw_lines)
+    for i in range(len(imported_raw_lines)):
+        output[i] = imported_raw_lines[i].processed_value
+    return output
+
+def get_raw_strings_in_order(imported_raw_lines: list[RawLogLine]) -> list[str]:
+    output: list[str] = [""] * len(imported_raw_lines)
+    for i in range(len(imported_raw_lines)):
+        output[i] = imported_raw_lines[i].raw_string
+    return output
+
+
+def segregate_by_tag_to_dict(imported_raw_lines: list[RawLogLine]) -> dict[list[RawLogLine]]:
+    output: dict[list[RawLogLine]] = {}
+    for raw_line in imported_raw_lines:
+        if raw_line.tag not in output:
+            output[raw_line.tag] = []
+        output[raw_line.tag].append(raw_line)
+    return output
+
+def segregate_by_tag_to_dataframe_raw_string(imported_raw_lines: list[RawLogLine], tag_name: str, data_name: str) -> pd.DataFrame:
+    tags: list[str] = get_tags_in_order(imported_raw_lines)
+    values_as_strings: list[str] = get_raw_strings_in_order(imported_raw_lines)
+    data: list[dict] = [
+        {tag_name: tag,
+         data_name: values_as_string} for tag, values_as_string in zip(tags, values_as_strings)]
+    return pd.DataFrame(data)
 
 
 
