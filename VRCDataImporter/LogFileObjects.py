@@ -2,9 +2,11 @@ from VRCDataImporter import (EXPORT_IDENTIFIER, EXPORT_SEPERATOR,
                              DATA_PARTITION,
                              HEADER_TYPE)
 
+
+
 class RawLogLine:
     def __init__(self, line: str):
-        if EXPORT_IDENTIFIER not in line:
+        if not RawLogLine.is_line_export_line(line):
             raise Exception("This line does not seem to be a log exported line!")
         isolated_line: str = line.split(EXPORT_IDENTIFIER)[1]
         components: list[str] = isolated_line.split(EXPORT_SEPERATOR)
@@ -18,6 +20,10 @@ class RawLogLine:
                 self.processed_value = self._process_string_as_csv(self.raw_string)
             case _:
                 raise NotImplementedError
+
+    @staticmethod
+    def is_line_export_line(line: str) -> bool:
+        return EXPORT_IDENTIFIER in line
 
 
     def _process_string_as_csv(self, raw_string: str) -> list:

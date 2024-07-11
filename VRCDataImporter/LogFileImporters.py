@@ -25,6 +25,8 @@ class HEADER_TYPE(Enum):
     HEADER_JSON: int = 3
 
 class ReadLogFile:
-    def __init__(self, log_path: Path):
+    def __init__(self, log_file_path: Path):
+        f = open(log_file_path, 'r', encoding='utf8')
+        
 
 
