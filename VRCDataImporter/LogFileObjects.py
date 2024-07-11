@@ -1,6 +1,6 @@
-from VRCDataImporter import (EXPORT_IDENTIFIER, EXPORT_SEPERATOR,
-                             DATA_PARTITION,
-                             HEADER_TYPE)
+from LogFileImporters import (EXPORT_IDENTIFIER, EXPORT_SEPERATOR,
+                              DATA_PARTITION,
+                              HEADER_TYPE)
 
 
 

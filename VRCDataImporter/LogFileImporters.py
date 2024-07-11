@@ -1,6 +1,6 @@
 from enum import Enum
 from pathlib import Path
-from InitialLogFileImporting import RawLogLine
+from LogFileObjects import RawLogLine
 
 # Following Settings affect parsing of log data.
 # Ensure this matches the export settings Unity side
@@ -24,9 +24,16 @@ class HEADER_TYPE(Enum):
     HEADER_2DCSV: int = 2
     HEADER_JSON: int = 3
 
-class ReadLogFile:
-    def __init__(self, log_file_path: Path):
-        f = open(log_file_path, 'r', encoding='utf8')
-        
+
+def read_log_file_without_further_formatting(log_file_path: Path):
+    f = open(log_file_path, 'r', encoding='utf8')
+    output: list[RawLogLine] = []
+    for line in f:
+        line_stripped: str = line.strip()
+        if not RawLogLine.is_line_export_line(line_stripped):
+            continue
+        output.append(RawLogLine(line_stripped))
+
+
 
 
