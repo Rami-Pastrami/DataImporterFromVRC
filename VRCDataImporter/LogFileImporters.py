@@ -30,8 +30,8 @@ class RawLogLine:
         isolated_line: str = line.split( EXPORT_IDENTIFIER)[1]
         components: list[str] = isolated_line.split(EXPORT_SEPERATOR)
         self.tag: str = components[0]
-        self.partition_type: DATA_PARTITION = DATA_PARTITION(components[1])
-        self.data_type: HEADER_TYPE = HEADER_TYPE(components[2])
+        self.partition_type: DATA_PARTITION = DATA_PARTITION(int(components[1]))
+        self.data_type: HEADER_TYPE = HEADER_TYPE(int(components[2]))
         self.raw_string: str = components[3]
         self.processed_value = None
         match self.data_type:
@@ -63,15 +63,15 @@ class RawLogLine:
         return elements
 
 
-def read_log_file_without_further_formatting(log_file_path: Path):
+def read_log_file_without_further_formatting(log_file_path: Path) -> list[RawLogLine]:
     f = open(log_file_path, 'r', encoding='utf8')
-    output: list[ RawLogLine] = []
+    output: list[RawLogLine] = []
     for line in f:
         line_stripped: str = line.strip()
         if not RawLogLine.is_line_export_line(line_stripped):
             continue
         output.append(RawLogLine(line_stripped))
-
+    return output
 
 
 
