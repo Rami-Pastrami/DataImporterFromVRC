@@ -1,0 +1,4 @@
+.idea
+venv
+VRCDataImporter/__pycache__
+*.pyc
