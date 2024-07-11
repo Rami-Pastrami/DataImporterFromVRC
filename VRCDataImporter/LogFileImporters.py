@@ -111,5 +111,16 @@ def segregate_by_tag_to_dataframe_raw_string(imported_raw_lines: list[RawLogLine
          data_name: values_as_string} for tag, values_as_string in zip(tags, values_as_strings)]
     return pd.DataFrame(data)
 
+def segregate_by_tag_to_dataframe_arrays(imported_raw_lines: list[RawLogLine], tag_name: str, array_element_labels: list[str]) -> pd.DataFrame:
+    tags: list[str] = get_tags_in_order(imported_raw_lines)
+    values_as_lists: list[list] = get_formatted_arrays_in_order(imported_raw_lines)
+    data: list[dict] = [
+        {tag_name: tag,
+         "data": values_as_string} for tag, values_as_string in zip(tags, values_as_lists)]
 
+    unlabled_frame: pd.DataFrame = pd.DataFrame(data)
+    unlabled_frame[array_element_labels] = pd.DataFrame(unlabled_frame["data"].tolist(), index=unlabled_frame.index)
+    unlabled_frame.drop(columns="data", inplace=True)
+
+    return unlabled_frame
 
