@@ -15,4 +15,3 @@ data_frame: pd.DataFrame = segregate_by_tag_to_dataframe_arrays(raw_line_objects
 
 
 print("Program End") # easy breakpoint
-
