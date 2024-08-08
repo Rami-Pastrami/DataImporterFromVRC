@@ -2,3 +2,6 @@
 venv
 VRCDataImporter/__pycache__
 *.pyc
+build/*
+dist/*
+VRCDataImporter.egg-info/*
