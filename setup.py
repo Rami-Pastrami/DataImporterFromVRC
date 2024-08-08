@@ -6,7 +6,7 @@ with open('readme.md', 'r') as f:
 
 setup(
     name="VRCDataImporter",
-    version='0.2',
+    version='0.3',
     packages=find_packages(),
     install_requires=['pandas>=2.2.0'],
     long_description=description,
