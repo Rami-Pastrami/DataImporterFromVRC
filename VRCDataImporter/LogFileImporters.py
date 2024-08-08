@@ -1,6 +1,5 @@
 from pathlib import Path
 from enum import Enum
-import numpy as np
 import pandas as pd
 
 # Following Settings affect parsing of log data.
